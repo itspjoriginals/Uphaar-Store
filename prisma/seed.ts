@@ -1,17 +1,23 @@
 // prisma/seed.ts
-import { PrismaClient } from '@prisma/client'
-import { hash } from 'crypto'
+import { Prisma, PrismaClient } from '@prisma/client'
+import { createHash } from 'crypto'
 
 const prisma = new PrismaClient()
 
+function hashPassword(password: string): string {
+  return createHash('sha256').update(password).digest('hex')
+}
+
 async function main() {
   // Create admin
-  const adminPassword = hash('sha256', 'admin123')
+  const adminEmail = process.env.ADMIN_EMAIL || 'admin@uphaar.com'
+  const adminPassword = hashPassword(process.env.ADMIN_PASSWORD || 'admin123')
+
   await prisma.admin.upsert({
-    where: { email: 'admin@uphaar.com' },
+    where: { email: adminEmail },
     update: {},
     create: {
-      email: 'admin@uphaar.com',
+      email: adminEmail,
       password: adminPassword,
       name: 'Uphaar Admin',
     },
@@ -75,7 +81,7 @@ async function main() {
       stockCount: 5,
       featured: false,
       customizable: false,
-      variants: null,
+      variants: Prisma.JsonNull,
     },
     {
       name: 'Pastel Rainbow Mini Bouquet',
@@ -129,7 +135,7 @@ async function main() {
       stockCount: 6,
       featured: false,
       customizable: true,
-      variants: null,
+      variants: Prisma.JsonNull,
     },
   ]
 
@@ -173,11 +179,16 @@ async function main() {
     },
   ]
 
-  for (const testimonial of testimonials) {
-    await prisma.testimonial.create({ data: testimonial })
-  }
+  await prisma.testimonial.deleteMany({
+    where: {
+      name: {
+        in: testimonials.map((testimonial) => testimonial.name),
+      },
+    },
+  })
+  await prisma.testimonial.createMany({ data: testimonials })
 
-  console.log('✅ Seed complete!')
+  console.log('Seed complete!')
 }
 
 main()
