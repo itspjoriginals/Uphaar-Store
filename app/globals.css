@@ -1,0 +1,134 @@
+/* app/globals.css */
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500&family=Inter:wght@300;400;500;600&display=swap');
+
+@layer base {
+  :root {
+    --background: 36 40% 96%;
+    --foreground: 25 30% 20%;
+    --card: 36 40% 98%;
+    --card-foreground: 25 30% 20%;
+    --popover: 36 40% 98%;
+    --popover-foreground: 25 30% 20%;
+    --primary: 25 42% 39%;
+    --primary-foreground: 36 40% 96%;
+    --secondary: 15 35% 85%;
+    --secondary-foreground: 25 30% 20%;
+    --muted: 30 25% 90%;
+    --muted-foreground: 25 20% 50%;
+    --accent: 36 50% 85%;
+    --accent-foreground: 25 30% 20%;
+    --destructive: 0 84% 60%;
+    --destructive-foreground: 0 0% 98%;
+    --border: 30 30% 85%;
+    --input: 30 30% 85%;
+    --ring: 25 42% 39%;
+    --radius: 0.75rem;
+  }
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+  body {
+    @apply bg-background text-foreground;
+  }
+  h1, h2, h3, h4 {
+    @apply font-serif;
+  }
+}
+
+@layer components {
+  .btn-primary {
+    @apply bg-brown text-cream px-6 py-3 rounded-full font-medium text-sm tracking-wide hover:bg-brown-dark transition-all duration-200 active:scale-95 shadow-sm hover:shadow-md;
+  }
+
+  .btn-outline {
+    @apply border border-brown text-brown px-6 py-3 rounded-full font-medium text-sm tracking-wide hover:bg-brown hover:text-cream transition-all duration-200 active:scale-95;
+  }
+
+  .card-product {
+    @apply bg-white rounded-2xl overflow-hidden shadow-sm hover:shadow-lg transition-all duration-300 hover:-translate-y-1;
+  }
+
+  .section-title {
+    @apply font-serif text-3xl md:text-4xl text-brown-dark leading-tight;
+  }
+
+  .section-subtitle {
+    @apply text-muted-foreground font-light text-base md:text-lg leading-relaxed;
+  }
+
+  .input-field {
+    @apply w-full px-4 py-3 rounded-xl border border-blush bg-white/80 text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-brown/30 focus:border-brown transition-all duration-200 text-sm;
+  }
+
+  .badge {
+    @apply inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium;
+  }
+}
+
+@layer utilities {
+  .text-balance {
+    text-wrap: balance;
+  }
+  
+  .grain-texture {
+    position: relative;
+  }
+  
+  .grain-texture::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.03'/%3E%3C/svg%3E");
+    pointer-events: none;
+    z-index: 1;
+  }
+
+  .scrollbar-hide {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+  }
+  .scrollbar-hide::-webkit-scrollbar {
+    display: none;
+  }
+}
+
+/* Smooth scroll */
+html {
+  scroll-behavior: smooth;
+}
+
+/* Selection color */
+::selection {
+  background: #E8CFC5;
+  color: #6B4226;
+}
+
+/* Custom scrollbar */
+::-webkit-scrollbar {
+  width: 6px;
+}
+::-webkit-scrollbar-track {
+  background: #F5EFE6;
+}
+::-webkit-scrollbar-thumb {
+  background: #D4B0A3;
+  border-radius: 3px;
+}
+
+/* Image zoom */
+.img-zoom {
+  overflow: hidden;
+}
+.img-zoom img {
+  transition: transform 0.5s ease;
+}
+.img-zoom:hover img {
+  transform: scale(1.05);
+}

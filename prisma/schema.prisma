@@ -1,0 +1,87 @@
+// prisma/schema.prisma
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model Product {
+  id          String   @id @default(cuid())
+  name        String
+  slug        String   @unique
+  description String
+  price       Float
+  comparePrice Float?
+  images      String[]
+  category    String
+  tags        String[]
+  variants    Json?
+  inStock     Boolean  @default(true)
+  stockCount  Int      @default(0)
+  featured    Boolean  @default(false)
+  customizable Boolean @default(false)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+  orderItems  OrderItem[]
+}
+
+model Order {
+  id              String      @id @default(cuid())
+  orderNumber     String      @unique
+  status          OrderStatus @default(PROCESSING)
+  items           OrderItem[]
+  subtotal        Float
+  shippingCost    Float       @default(0)
+  total           Float
+  customerName    String
+  customerEmail   String
+  customerPhone   String
+  shippingAddress Json
+  paymentStatus   String      @default("pending")
+  paymentId       String?
+  notes           String?
+  createdAt       DateTime    @default(now())
+  updatedAt       DateTime    @updatedAt
+}
+
+model OrderItem {
+  id             String  @id @default(cuid())
+  orderId        String
+  productId      String
+  quantity       Int
+  price          Float
+  customMessage  String?
+  variant        String?
+  order          Order   @relation(fields: [orderId], references: [id])
+  product        Product @relation(fields: [productId], references: [id])
+}
+
+model Admin {
+  id        String   @id @default(cuid())
+  email     String   @unique
+  password  String
+  name      String
+  createdAt DateTime @default(now())
+}
+
+model Testimonial {
+  id         String   @id @default(cuid())
+  name       String
+  location   String?
+  rating     Int
+  review     String
+  image      String?
+  featured   Boolean  @default(false)
+  createdAt  DateTime @default(now())
+}
+
+enum OrderStatus {
+  PROCESSING
+  CONFIRMED
+  SHIPPED
+  DELIVERED
+  CANCELLED
+}
