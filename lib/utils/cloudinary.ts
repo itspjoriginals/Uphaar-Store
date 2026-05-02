@@ -8,13 +8,18 @@ cloudinary.config({
 })
 
 export async function uploadImage(file: string, folder = 'uphaar/products') {
-  const result = await cloudinary.uploader.upload(file, {
-    folder,
-    transformation: [
-      { width: 800, height: 800, crop: 'fill', quality: 'auto', fetch_format: 'auto' },
-    ],
-  })
-  return result.secure_url
+  try {
+    const result = await cloudinary.uploader.upload(file, {
+      folder,
+      transformation: [
+        { width: 800, height: 800, crop: 'fill', quality: 'auto', fetch_format: 'auto' },
+      ],
+    })
+    return result.secure_url
+  } catch (error) {
+    console.error('Error uploading image to Cloudinary:', error)
+    throw new Error('Image upload failed. Please try again.')
+  }
 }
 
 export async function deleteImage(publicId: string) {
